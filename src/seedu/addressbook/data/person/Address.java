@@ -39,7 +39,10 @@ public class Address {
         this.unit = new Unit(addressElements[2].trim());
         this.postalCode = new PostalCode(addressElements[3].trim());
 
-        this.value = trimmedAddress;
+        this.value = block.toString() + ", "
+                        + street.toString() + ", "
+                        + unit.toString() + ", "
+                        + postalCode.toString();
     }
 
     /**
