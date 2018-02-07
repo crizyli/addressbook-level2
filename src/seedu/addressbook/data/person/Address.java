@@ -12,7 +12,7 @@ public class Address {
     public static final String MESSAGE_ADDRESS_CONSTRAINTS = "Address should be 4 strings seperated by commas, representing block" +
             "(number and character only), street(number and character only), unit (number and character and #), and postal code" +
             "(fixed 6 numbers)";
-    public static final String ADDRESS_VALIDATION_REGEX = "[0-9a-zA-Z]+,\\s[0-9a-zA-Z]+,\\s[0-9#a-zA-Z]+,\\s(\\d{6})";
+    public static final String ADDRESS_VALIDATION_REGEX = "[0-9a-zA-Z]+,\\s[0-9a-zA-Z\\s]+,\\s[0-9#a-zA-Z]+,\\s(\\d{6})";
 
     public final Block block;
     public final Street street;

@@ -86,7 +86,7 @@
 || Tags names should be alphanumeric
 || ===================================================
 || Enter command: || [Command entered:  add Adam Brown p/111111 e/adam@gmail.com a/111, alpha street]
-|| Address should be 4 strings seperated by commas
+|| Address should be 4 strings seperated by commas, representing block(number and character only), street(number and character only), unit (number and character and #), and postal code(fixed 6 numbers)
 || ===================================================
 || Enter command: || [Command entered:  add Adam Brown p/111111 e/adam@gmail.com a/111, alpha street, 2, 211222]
 || New person added: Adam Brown Phone: 111111 Email: adam@gmail.com Address: 111, alpha street, 2, 211222 Tags: 
