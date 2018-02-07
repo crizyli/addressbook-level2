@@ -14,7 +14,7 @@ import seedu.addressbook.storage.StorageFile;
 import seedu.addressbook.storage.StorageFile.InvalidStorageFilePathException;
 import seedu.addressbook.storage.StorageFile.StorageOperationException;
 import seedu.addressbook.ui.TextUi;
-
+import seedu.addressbook.common.Messages;
 
 /**
  * Entry point of the Address Book application.
@@ -28,6 +28,7 @@ public class Main {
     private TextUi ui;
     private StorageFile storage;
     private AddressBook addressBook;
+    private Messages message;
 
     /** The list of person shown to the user most recently.  */
     private List<? extends ReadOnlyPerson> lastShownList = Collections.emptyList();
@@ -105,12 +106,15 @@ public class Main {
      * @param command user command
      * @return result of the command
      */
-    private CommandResult executeCommand(Command command)  {
+    private CommandResult executeCommand(Command command) {
         try {
             command.setData(addressBook, lastShownList);
             CommandResult result = command.execute();
             storage.save(addressBook);
             return result;
+        } catch (StorageOperationException se) {
+            ui.showToUser(storage.getPath() + message.MESSAGE_CANNOT_WRITE_FILE);
+            return new CommandResult("");
         } catch (Exception e) {
             ui.showToUser(e.getMessage());
             throw new RuntimeException(e);
