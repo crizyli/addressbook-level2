@@ -1,8 +1,11 @@
 package seedu.addressbook;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 import seedu.addressbook.commands.Command;
 import seedu.addressbook.commands.CommandResult;
@@ -24,14 +27,18 @@ public class Main {
 
     /** Version info of the program. */
     public static final String VERSION = "AddressBook Level 2 - Version 1.0";
+    private static final String LINE_PREFIX = "|| ";
 
     private TextUi ui;
     private StorageFile storage;
     private AddressBook addressBook;
     private Messages message;
+    private final Scanner in = new Scanner(System.in);
+    private final PrintStream out = System.out;
 
     /** The list of person shown to the user most recently.  */
     private List<? extends ReadOnlyPerson> lastShownList = Collections.emptyList();
+
 
 
     public static void main(String... launchArgs) {
@@ -107,18 +114,26 @@ public class Main {
      * @return result of the command
      */
     private CommandResult executeCommand(Command command) {
+        command.setData(addressBook, lastShownList);
+        CommandResult result = command.execute();
         try {
-            command.setData(addressBook, lastShownList);
-            CommandResult result = command.execute();
+
             storage.save(addressBook);
             return result;
         } catch (StorageOperationException se) {
             ui.showToUser(storage.getPath() + message.MESSAGE_CANNOT_WRITE_FILE);
-            return new CommandResult("");
+            ui.showToUser(LINE_PREFIX + "Enter yes: ");
+            String confirmString = in.nextLine();
+            executeCommand(command);
+            return result;
         } catch (Exception e) {
             ui.showToUser(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    private void reSave() throws StorageOperationException {
+        storage.save(addressBook);
     }
 
     /**
