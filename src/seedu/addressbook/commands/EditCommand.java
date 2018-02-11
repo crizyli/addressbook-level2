@@ -1,7 +1,7 @@
 package seedu.addressbook.commands;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.lang.String;
 
 import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.person.Address;
@@ -67,12 +67,23 @@ public class EditCommand extends Command{
     @Override
     public CommandResult execute() {
         try {
-
+            final ReadOnlyPerson toDelete = getPersonsWithName(toEdit.getName().toString());
             addressBook.addPerson(toEdit);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toEdit));
         } catch (UniquePersonList.DuplicatePersonException dpe) {
             return new CommandResult(MESSAGE_NO_SUCH_PERSON);
         }
+    }
+
+    private ReadOnlyPerson getPersonsWithName(String name) {
+        final List<ReadOnlyPerson> matchedPersons = new ArrayList<>();
+        for (ReadOnlyPerson person : addressBook.getAllPersons()) {
+            final String personName = person.getName().toString();
+            if (name.compareTo(personName) == 0) {
+                matchedPersons.add(person);
+            }
+        }
+        return matchedPersons.isEmpty()? null : matchedPersons.get(0);
     }
 
 }
