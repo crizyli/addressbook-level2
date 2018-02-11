@@ -3,6 +3,7 @@ package seedu.addressbook.commands;
 import java.util.*;
 import java.lang.String;
 
+import seedu.addressbook.common.Messages;
 import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.person.Address;
 import seedu.addressbook.data.person.Email;
@@ -29,7 +30,7 @@ public class EditCommand extends Command{
             + " John Doe p/98765432 e/johnd@gmail.com a/311, Clementi Ave 2, #02-25 t/friends t/owesMoney";
 
     public static final String MESSAGE_SUCCESS = "Person edited: %1$s";
-    public static final String MESSAGE_NO_SUCH_PERSON = "This person does not exist in the address book";
+    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
 
     private final Person toEdit;
 
@@ -68,13 +69,26 @@ public class EditCommand extends Command{
     public CommandResult execute() {
         try {
             final ReadOnlyPerson toDelete = getPersonsWithName(toEdit.getName().toString());
+            if (toDelete != null) {
+                addressBook.removePerson(toDelete);
+            } else {
+                return new CommandResult(Messages.MESSAGE_PERSON_NOT_IN_ADDRESSBOOK);
+            }
             addressBook.addPerson(toEdit);
             return new CommandResult(String.format(MESSAGE_SUCCESS, toEdit));
         } catch (UniquePersonList.DuplicatePersonException dpe) {
-            return new CommandResult(MESSAGE_NO_SUCH_PERSON);
+            return new CommandResult(MESSAGE_DUPLICATE_PERSON);
+        } catch (UniquePersonList.PersonNotFoundException pnfe) {
+            return new CommandResult(Messages.MESSAGE_PERSON_NOT_IN_ADDRESSBOOK);
         }
     }
 
+    /**
+     * Find person with name in the address book whose name is exactly name.
+     *
+     * @param name for searching
+     * @return person found
+     */
     private ReadOnlyPerson getPersonsWithName(String name) {
         final List<ReadOnlyPerson> matchedPersons = new ArrayList<>();
         for (ReadOnlyPerson person : addressBook.getAllPersons()) {
