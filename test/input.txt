@@ -55,6 +55,20 @@
   add Esther Potato p/555555 e/esther@not.a.real.potato pa/555, epsilon street t/tubers t/starchy
 
 ##########################################################
+# test edit person command
+##########################################################
+
+  # should catch PersonNotFoundException
+  edit Adam sks p/111111 e/adam@gmail.com a/111, alpha street
+  list
+
+  # should edit correctly and list non private information
+   edit Adam Brown p/666666 e/adam2@gmail.com a/222, alphasss street
+   list
+   edit Betsy Choo pp/777777 pe/benchoo2@nus.edu.sg pa/222, betasss street t/secretive
+   list
+
+##########################################################
 # test view/viewall persons command
 ##########################################################
 
